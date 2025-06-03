@@ -1,0 +1,86 @@
+🧠 Smart Job Tracker & Resume Optimizer
+Nền tảng hỗ trợ tìm việc thông minh tích hợp AI (GPT-4)
+
+🔧 Công nghệ sử dụng (Tech Stack)
+Frontend: React.js (hoặc Vue.js), TailwindCSS, TypeScript
+
+Backend: Node.js (Express), TypeScript
+
+AI: GPT-4 API (OpenAI)
+
+Database: MongoDB (Mongoose) sau đó phát triển lên mysql
+
+Automation: Puppeteer / Scraper API
+
+Tích hợp: Google API (Calendar, Drive, Gmail), LinkedIn, Indeed
+
+⚙️ Tính năng chính (MVP)
+👤 Dành cho người tìm việc
+Nhập CV & Job Description (JD)
+→ Hệ thống đánh giá mức độ phù hợp giữa CV và JD (dùng GPT-4).
+
+Gợi ý chỉnh sửa CV theo JD
+→ GPT đưa ra các gợi ý sửa đổi, thêm kỹ năng, từ khóa liên quan.
+
+Tạo CV từ JD tự động
+→ Người dùng chỉ cần dán JD, hệ thống tạo ra một bản CV hoàn chỉnh.
+
+Theo dõi trạng thái ứng tuyển
+→ Các trạng thái: Đã nộp, Đang phỏng vấn, Bị từ chối, Được offer.
+
+Nhắc gửi follow-up email
+→ Có mẫu sẵn, nhắc người dùng sau 3–5 ngày chưa phản hồi.
+
+🧑‍💼 Dành cho nhà tuyển dụng
+Đăng bài tuyển dụng (job post)
+
+Quản lý hồ sơ ứng viên
+→ Xem danh sách ứng viên, lọc theo mức độ phù hợp do GPT đánh giá.
+
+Phỏng vấn trước bằng AI (Mock Interview)
+→ AI hỏi và chấm điểm dựa trên JD + CV.
+
+🔗 Tính năng tích hợp nâng cao (Mở rộng)
+Tính năng	Mô tả
+Google Calendar	Tự động thêm lịch phỏng vấn vào Google Calendar
+Google Drive	Lưu trữ các CV và JD theo dạng thư mục
+Gmail API	Gửi CV trực tiếp qua email, nhận thông báo phản hồi
+LinkedIn/Indeed Integration	Import job mới mỗi ngày qua scraper hoặc API
+Gợi ý job phù hợp	AI dựa vào nội dung CV để gợi ý job từ nguồn LinkedIn/Indeed
+Dashboard thống kê	Timeline, Heatmap theo dõi quá trình ứng tuyển, thời gian phản hồi, tỉ lệ nhận job
+Bộ CV chuyên biệt	Người dùng có thể tạo nhiều CV theo từng JD khác nhau
+
+🧩 Phân hệ người dùng
+Loại người dùng	Chức năng chính
+🧑‍💻 Người tìm việc	Quản lý CV, ứng tuyển, nhận gợi ý, theo dõi tiến độ
+🧑‍💼 Nhà tuyển dụng	Đăng job, tiếp nhận hồ sơ, lọc ứng viên, nhờ AI phỏng vấn
+
+🏗️ Kiến trúc đề xuất
+Frontend:
+
+Auth (JWT, Google OAuth)
+
+CV Editor (rich text + template PDF export)
+
+Job Dashboard
+
+Job Tracker UI
+
+AI Feedback Viewer
+
+Backend:
+
+Express routes: /auth, /jobs, /cv, /ai, /recruiter
+
+MongoDB Models: User, Job, CV, Application
+
+GPT integration logic: CV ↔ JD ↔ Suggestion
+
+Scheduler: follow-up reminder, calendar sync
+
+📅 Gợi ý chia giai đoạn triển khai
+Giai đoạn	Nội dung
+Giai đoạn 1 (MVP)	Nhập CV + JD, đánh giá độ phù hợp, gợi ý chỉnh sửa CV, tạo CV từ JD, theo dõi trạng thái
+Giai đoạn 2	Gửi email follow-up, tích hợp Google Drive, tạo Dashboard
+Giai đoạn 3	Scraper job, tích hợp LinkedIn/Indeed, tạo bộ CV riêng cho từng JD
+Giai đoạn 4	Tính năng nhà tuyển dụng, AI phỏng vấn, tích hợp lịch Google
