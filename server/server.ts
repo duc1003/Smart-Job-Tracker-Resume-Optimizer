@@ -6,6 +6,12 @@ import { Connect } from "./configs/Connect";
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
+
+// Middleware
+app.use(express.json()); // For parsing application/json
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
