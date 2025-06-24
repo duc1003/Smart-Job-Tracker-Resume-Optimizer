@@ -5,6 +5,6 @@ import { RegisterMiddleware } from "../middlewares/User.middleware";
 const router = Router();
 
 router.get("/login", Login);
-router.post("/register", RegisterMiddleware, Register);
+router.post("/register", Register);
 
 export default router;
