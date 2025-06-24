@@ -17,6 +17,19 @@ app.use(cors());
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
+
+// ========  TEST JWT TOKEN =================
+app.get("/dash", (req: Request, res: Response):void => {
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
+  if (!authHeader || !authHeader.startsWith('Bearer ')){
+    res.status(401).json({error: "You is not Login!"})
+    return ;
+  }
+  res.send("DASHHHH");
+});
+// ===========================================
+
 app.use('/api/users', UserRouter);
 
 app.listen(PORT, () => {

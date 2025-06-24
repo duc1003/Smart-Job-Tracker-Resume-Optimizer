@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import UserModel from '../models/User.model';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 
 export const Login = async (req : Request, res : Response):Promise<void> => {
@@ -18,8 +19,8 @@ export const Login = async (req : Request, res : Response):Promise<void> => {
             res.status(401).json({ message: 'Invalid email or password' });
             return;
         }
-
-        res.json({ id: user._id, email: user.email, role: user.role,  message: 'Login successfully.' });
+        const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET!, { expiresIn:'1h'});
+        res.json({ id: user._id, email: user.email, role: user.role,  message: 'Login successfully.', token });
     } catch (err) {
         res.status(500).json({ message: 'Login failed' });
     }
