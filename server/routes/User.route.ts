@@ -1,9 +1,10 @@
 import { Router, Request, Response } from "express";
+import { Login, Register } from "../controllers/User.controller";
+import { RegisterMiddleware } from "../middlewares/User.middleware";
 
 const router = Router();
 
-router.get("login", (req: Request, res: Response) => {
-  res.send("Login Page");
-});
+router.get("/login", Login);
+router.post("/register", RegisterMiddleware, Register);
 
 export default router;

@@ -17,7 +17,7 @@ app.use(cors());
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
-app.use('/api/users/', UserRouter);
+app.use('/api/users', UserRouter);
 
 app.listen(PORT, () => {
   Connect()
