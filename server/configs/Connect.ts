@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-export const connectDB = async () => {
+export const Connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI || '', {
-      dbName: 'smart-job-tracker', // You can omit this if already in your URI
+      dbName: 'smart-job-tracker-resume-optimizer', // You can omit this if already in your URI
     });
 
     console.log('✅ MongoDB connected.');
