@@ -1,7 +1,9 @@
 import express, { Express, Request, Response } from "express";
+import cors from 'cors';
 import dotenv from "dotenv";
 dotenv.config();
 import { Connect } from "./configs/Connect";
+import UserRouter from "./routes/User.route";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
@@ -10,11 +12,12 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
-
+app.use(cors());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
+app.use('/api/users/', UserRouter);
 
 app.listen(PORT, () => {
   Connect()
