@@ -2,8 +2,10 @@ import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
 dotenv.config();
+import jwt from 'jsonwebtoken';
 import { Connect } from "./configs/Connect";
 import UserRouter from "./routes/User.route";
+import DashboardRouter from "./routes/Dashboard.route";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
@@ -18,19 +20,9 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
 
-// ========  TEST JWT TOKEN =================
-app.get("/dash", (req: Request, res: Response):void => {
-  const authHeader = req.headers.authorization;
-  console.log(authHeader);
-  if (!authHeader || !authHeader.startsWith('Bearer ')){
-    res.status(401).json({error: "You is not Login!"})
-    return ;
-  }
-  res.send("DASHHHH");
-});
-// ===========================================
 
 app.use('/api/users', UserRouter);
+app.use('/api/dashboard', DashboardRouter);
 
 app.listen(PORT, () => {
   Connect()
