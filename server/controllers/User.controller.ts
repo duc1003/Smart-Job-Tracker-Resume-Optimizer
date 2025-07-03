@@ -44,7 +44,8 @@ export const Login = async (req : Request, res : Response):Promise<void> => {
 
 export const Register = async (req : Request, res : Response):Promise<void> => {
     try{
-        const { email, password, name} = req.body;
+        //get data from request body
+        const { email, password, role, name } = req.body;
         const existedUser = await UserModel.findOne({ email });
         if (existedUser){
             res.status(401).json({message : "Email is already existed!"});
@@ -52,6 +53,10 @@ export const Register = async (req : Request, res : Response):Promise<void> => {
         }
         const password_hash = await bcrypt.hash(password, 10);
 
+
+
+
+        //create new user
         const newUser = await UserModel.create({
             email,
             passwordHash:password_hash,
