@@ -1,11 +1,16 @@
-import { Router, Request, Response } from "express";
-import { LoginMiddleware, RegisterMiddleware } from "../middlewares/User.middleware";
-import { AuthController } from "../controllers/Auth.controller";
+// routes/User.route.ts
+import { Router } from 'express';
+import { AuthController } from '../controllers/Auth.controller';
+import { authMiddleware, authorizeRole } from '../middlewares/Auth.middleware';
+import { validate } from '../middlewares/Validation.middleware'; // Import middleware validation
+import { loginSchema, registerSchema } from '../validation/AuthSchema.validation'; // Import schemas Zod
 
 const router = Router();
 const authController = new AuthController();
 
-router.get("/login", LoginMiddleware, authController.login.bind(authController));
-router.post("/register", RegisterMiddleware, authController.register.bind(authController));
+// Route Đăng ký (Register)
+router.post('/register', validate(registerSchema), authController.register);
 
+// Route Đăng nhập (Login)
+router.post('/login', validate(loginSchema), authController.login);
 export default router;

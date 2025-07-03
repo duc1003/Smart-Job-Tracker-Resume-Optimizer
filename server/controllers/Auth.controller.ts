@@ -1,90 +1,90 @@
+// controllers/Auth.controller.ts
 import { AuthService } from "../services/AuthService";
 import { Request, Response } from "express";
 import { IUser } from "../interfaces/IUser";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// Đảm bảo JWT_SECRET được kiểm tra khi khởi động server
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error("FATAL ERROR: JWT_SECRET is not defined. Please set it in your .env file.");
+    // Trong môi trường sản phẩm, bạn có thể thoát ứng dụng ở đây.
+    // process.exit(1);
+}
+
 export class AuthController {
     private authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
-        // Removed problematic console.log from constructor
+        // Bind các phương thức để đảm bảo 'this' context đúng
+        this.login = this.login.bind(this);
+        this.register = this.register.bind(this);
     }
 
     /**
-     * Login user
-     * @param req - Express request object
-     * @param res - Express response object
+     * Đăng nhập người dùng
+     * @param req - Đối tượng request của Express
+     * @param res - Đối tượng response của Express
      */
     public async login(req: Request, res: Response): Promise<void> {
         try {
-            // Basic input check (pre-validation middleware if not used)
+            // Dữ liệu đã được validate bởi validationMiddleware
             const { email, password } = req.body;
-            if (!email || !password) {
-                res.status(400).json({ message: 'Email and password are required.' });
-                return;
-            }
 
             const user = await this.authService.findUserByEmail(email);
 
-            // Using more specific error messages for security (avoiding "user not found" vs "wrong password")
             if (!user || !user.passwordHash) {
-                res.status(401).json({ message: 'Invalid credentials' });
+                res.status(401).json({ message: 'Thông tin đăng nhập không hợp lệ.' });
                 return;
             }
 
             const isMatch = await bcrypt.compare(password, user.passwordHash);
             if (!isMatch) {
-                res.status(401).json({ message: 'Invalid credentials' });
+                res.status(401).json({ message: 'Thông tin đăng nhập không hợp lệ.' });
                 return;
             }
 
-            // Ensure JWT_SECRET is available at application startup (checked in server.ts)
-            const jwtSecret = process.env.JWT_SECRET!; // Non-null assertion is safer if checked at startup
+            if (!JWT_SECRET) {
+                console.error("[AuthController][login] JWT_SECRET bị thiếu trong quá trình tạo token.");
+                res.status(500).json({ message: 'Lỗi máy chủ: JWT secret chưa được cấu hình.' });
+                return;
+            }
 
             const token = jwt.sign(
                 { id: user._id, email: user.email, role: user.role },
-                jwtSecret,
+                JWT_SECRET,
                 { expiresIn: "30m" }
             );
 
             res.json({
-                message: 'Login successful.',
-                user: { id: user._id, email: user.email, role: user.role },
+                message: 'Đăng nhập thành công.',
+                user: { id: user._id, email: user.email, role: user.role, name: user.name },
                 token
             });
-        } catch (error: any) { // Catching specific errors from AuthService for better response
-            console.error("[AuthController][login] Error during login:", error);
-            // Example of catching specific errors from AuthService if you throw custom errors
+
+        } catch (error: any) {
+            console.error("[AuthController][login] Lỗi trong quá trình đăng nhập:", error);
+            // AuthService ném lỗi cụ thể, chúng ta có thể bắt và xử lý tương ứng
             if (error.message === "Failed to retrieve user due to a server error.") {
-                res.status(500).json({ message: "An internal server error occurred during login." });
+                res.status(500).json({ message: "Đã xảy ra lỗi máy chủ nội bộ khi tìm kiếm người dùng." });
+                return;
             }
-            res.status(500).json({ message: 'Login failed due to an unexpected error.' });
+            res.status(500).json({ message: 'Đăng nhập thất bại do lỗi máy chủ không mong muốn.' });
         }
     }
 
     /**
-     * Register new user
-     * @param req - Express request object
-     * @param res - Express response object
+     * Đăng ký người dùng mới
+     * @param req - Đối tượng request của Express
+     * @param res - Đối tượng response của Express
      */
     public async register(req: Request, res: Response): Promise<void> {
         try {
-            // Basic input check (pre-validation middleware if not used)
+            // Dữ liệu đã được validate bởi validationMiddleware
             const { email, password, role, name } = req.body;
-            if (!email || !password || !role || !name) {
-                res.status(400).json({ message: 'Email, password, role, and name are all required for registration.' });
-                return;
-            }
 
-            // You might add basic format validation here if not using a dedicated middleware
-            // Example: if (!isValidEmail(email)) { res.status(400).json({ message: 'Invalid email format' }); return; }
-            // Example: if (password.length < 8) { res.status(400).json({ message: 'Password must be at least 8 characters long' }); return; }
-            // Example: if (!['job_seeker', 'recruiter'].includes(role)) { res.status(400).json({ message: 'Invalid role specified.' }); return; }
-
-
-            // AuthService now handles checking for existing user and throws a specific error
             const passwordHash = await bcrypt.hash(password, 10);
 
             const newUser: IUser = await this.authService.createUser({
@@ -95,22 +95,23 @@ export class AuthController {
             });
 
             res.status(201).json({
-                message: 'User created successfully',
-                user: { id: newUser._id, email: newUser.email, role: newUser.role }
+                message: 'Người dùng đã được tạo thành công.',
+                user: { id: newUser._id, email: newUser.email, role: newUser.role, name: newUser.name }
             });
 
         } catch (error: any) {
-            // Catch specific errors thrown by AuthService and map to appropriate HTTP status codes
+            // Xử lý các loại lỗi cụ thể từ AuthService
             if (error.message === "User with this email already exists.") {
                 res.status(409).json({ message: error.message }); // 409 Conflict
+                return;
             }
             if (error.message.startsWith("Validation failed:")) {
-                res.status(400).json({ message: error.message }); // 400 Bad Request
+                res.status(400).json({ message: error.message }); // 400 Bad Request (lỗi validation từ Mongoose)
+                return;
             }
 
-            // Log unexpected errors for debugging
-            console.error("[AuthController][register] Unexpected error during registration:", error);
-            res.status(500).json({ message: 'Registration failed due to an internal server error.' });
+            console.error("[AuthController][register] Lỗi không mong muốn trong quá trình đăng ký:", error);
+            res.status(500).json({ message: 'Đăng ký thất bại do lỗi máy chủ nội bộ.' });
         }
     }
 }
