@@ -1,29 +1,53 @@
 import { IUser } from "../interfaces/IUser";
 import UserSchema from "../models/User.model";
+import { Document } from 'mongoose';
+
+// Define a type for a Mongoose User Document to include methods like .save()
+// This assumes IUser is already defined and matches your Mongoose Schema
+type UserDocument = IUser & Document;
 
 export class AuthService {
     /**
      * find user by email
      * @param email - email of user
-     * @return Promise<IUser | null> - user object or null if not found
+     * @returns Promise<IUser | null> - user object or null if not found
      */
     public async findUserByEmail(email: string): Promise<IUser | null> {
-        // Use Mongoose's findOne method
-        return UserSchema.findOne({ email: email }).exec(); // .exec() returns a Promise
+        try {
+            // No 'await' needed here as the function is async and will return the Promise directly
+            return UserSchema.findOne({ email: email });
+        } catch (error) {
+            console.error(`[AuthService][findUserByEmail] Error finding user by email '${email}':`, error);
+            // Re-throw a more generic error or a custom application-specific error
+            throw new Error("Failed to retrieve user due to a server error.");
+        }
     }
 
     /**
      * create new user
-     * @param userData - object containing user data
-     * @return newly created user object
+     * @param userData - object containing user data (email and role are required)
+     * @returns Promise<IUser> - newly created user object
      */
-
     public async createUser(userData: Partial<IUser> & { email: string; role: 'job_seeker' | 'recruiter'; }): Promise<IUser> {
-        // Ensure email and role are present, others are optional as per Partial<IUser>
-        // Mongoose will handle saving all properties provided in userData that match the schema.
-        const newUser = new UserSchema(userData);
-        return newUser.save();
+        try {
+            const newUser: UserDocument = new UserSchema(userData);
+            return await newUser.save();
+        } catch (error: any) { // Using 'any' for error type to handle various Mongoose/MongoDB errors
+            // Check for duplicate key error (MongoDB error code 11000)
+            if (error.code === 11000) {
+                console.warn(`[AuthService][createUser] Attempted to create user with existing email: '${userData.email}'`);
+                throw new Error("User with this email already exists.");
+            }
+            // Handle Mongoose validation errors
+            if (error.name === 'ValidationError') {
+                const messages = Object.values(error.errors).map((err: any) => err.message);
+                console.error(`[AuthService][createUser] Mongoose Validation Error for user '${userData.email}':`, messages);
+                throw new Error(`Validation failed: ${messages.join(', ')}`);
+            }
+
+            console.error(`[AuthService][createUser] Error creating user '${userData.email}':`, error);
+            // Re-throw a more generic error for other unexpected issues
+            throw new Error("Failed to create user due to a server error.");
+        }
     }
-
-
 }
