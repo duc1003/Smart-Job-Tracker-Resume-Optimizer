@@ -2,10 +2,10 @@ import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
 dotenv.config();
-import jwt from 'jsonwebtoken';
 import { Connect } from "./configs/Connect";
 import UserRouter from "./routes/User.route";
 import DashboardRouter from "./routes/Dashboard.route";
+import JobRouter from "./routes/Job.route";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use('/api/users', UserRouter);
 app.use('/api/dashboard', DashboardRouter);
+app.use('/api/jobs', JobRouter)
 
 app.listen(PORT, () => {
   Connect()

@@ -21,4 +21,7 @@ router.put('/update/:id', authMiddleware, validate(updateSchema), authController
 // Route Xóa người dùng (Delete)
 router.delete('/delete/:id', authMiddleware, authController.delete);
 
+// Route Logout
+router.post('/logout');
+
 export default router;
