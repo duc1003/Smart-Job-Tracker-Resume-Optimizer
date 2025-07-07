@@ -60,7 +60,7 @@ export class AuthController {
 
             res.json({
                 message: 'Đăng nhập thành công.',
-                user: { id: user._id, email: user.email, role: user.role, name: user.name },
+                user,
                 token
             });
 

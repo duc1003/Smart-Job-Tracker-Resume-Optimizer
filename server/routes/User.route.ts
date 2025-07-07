@@ -12,5 +12,5 @@ const authController = new AuthController();
 router.post('/register', validate(registerSchema), authController.register);
 
 // Route Đăng nhập (Login)
-router.post('/login', validate(loginSchema), authController.login);
+router.get('/login', validate(loginSchema), authController.login);
 export default router;
