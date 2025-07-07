@@ -21,6 +21,8 @@ export class AuthController {
         // Bind các phương thức để đảm bảo 'this' context đúng
         this.login = this.login.bind(this);
         this.register = this.register.bind(this);
+        this.update = this.update.bind(this)
+        this.delete = this.delete.bind(this)
     }
 
     /**
@@ -51,6 +53,7 @@ export class AuthController {
                 res.status(500).json({ message: 'Lỗi máy chủ: JWT secret chưa được cấu hình.' });
                 return;
             }
+            // req.user = user;
 
             const token = jwt.sign(
                 { id: user._id, email: user.email, role: user.role },
@@ -112,6 +115,87 @@ export class AuthController {
 
             console.error("[AuthController][register] Lỗi không mong muốn trong quá trình đăng ký:", error);
             res.status(500).json({ message: 'Đăng ký thất bại do lỗi máy chủ nội bộ.' });
+        }
+    }
+
+    /**
+     * Cập nhật thông tin người dùng
+     * @param req - Đối tượng request của Express
+     * @param res - Đối tượng response của Express
+     */
+    public async update(req: Request, res: Response): Promise<void> {
+        if (!req.user || !req.user.id){
+            res.status(401).json({ error: 'Truy cập bị từ chối. Phải đăng nhập!' });
+            return ;
+        }
+        // get user id from decoded jwt
+        const userIdFromToken = req.user.id;
+        
+        // get user id from params
+        const userIdFromParam = req.params.id;
+        if (!userIdFromParam){
+            res.status(400).json({ error:"Id is required!" });
+            return ;
+        }
+        if (userIdFromToken !== userIdFromParam){
+            res.status(400).json({ error:"You don't have permission to access data on this site!" });
+            return ;
+        }
+
+        try {
+            const updateUser = await this.authService.updateUser(userIdFromParam, req.body);
+            
+            res.status(200).json({
+                massage: "Update successfully.",
+                updateUser: updateUser
+            });
+            return ;
+        } catch (error:any) {
+            console.log(error)
+            if (error.message === "DUPLICATE_EMAIL"){
+                res.status(400).json({ error: "Email is already existed!" });
+                return ;
+            }
+            res.status(404).json({
+                massage: "Invalid Id!",
+            });
+            return ;
+        }
+    }
+
+    /**
+     * Xóa người dùng
+     * @param req - Đối tượng request của Express
+     * @param res - Đối tượng response của Express
+     */
+    public async delete(req: Request, res: Response): Promise<void>{
+        if (!req.user || !req.user.id){
+            res.status(401).json({ error: 'Truy cập bị từ chối. Phải đăng nhập!' });
+            return ;
+        }
+        // get user id from decoded jwt
+        const userIdFromToken = req.user.id;
+        
+        // get user id from params
+        const userIdFromParam = req.params.id;
+        if (!userIdFromParam){
+            res.status(400).json({ error:"Id is required!" });
+            return ;
+        }
+        if (userIdFromToken !== userIdFromParam){
+            res.status(400).json({ error:"You don't have permission to access data on this site!" });
+            return ;
+        }
+
+        try {
+            const deletedUser = await this.authService.deleteUser(userIdFromParam);
+            res.status(200).json({
+                massage: "Delete successfully.",
+                deletedUser: deletedUser
+            });
+            return ;
+        } catch (error) {
+            res.status(404).json({ error : "Can not found user!" });
         }
     }
 }

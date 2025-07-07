@@ -1,3 +1,4 @@
+import id from "zod/v4/locales/id.js";
 import { IUser } from "../interfaces/IUser";
 import UserSchema from "../models/User.model";
 import { Document } from 'mongoose';
@@ -48,6 +49,62 @@ export class AuthService {
             console.error(`[AuthService][createUser] Error creating user '${userData.email}':`, error);
             // Re-throw a more generic error for other unexpected issues
             throw new Error("Failed to create user due to a server error.");
+        }
+    }
+
+    /**
+     * find user by id
+     * @param id - id of user
+     * @returns Promise<IUser | null> - user object or null if not found
+     */
+    public async findUserById(id: string): Promise<IUser | null> {
+        try {
+            // No 'await' needed here as the function is async and will return the Promise directly
+            return UserSchema.findById( id );
+        } catch (error) {
+            console.error(`[AuthService][findUserById] Error finding user by Id '${id}':`, error);
+            // Re-throw a more generic error or a custom application-specific error
+            throw new Error("Failed to retrieve user due to a server error.");
+        }
+    }
+
+    /**
+     * find user by id
+     * @param id - id of user
+     * @param updateData - data for update user
+     * @returns Promise<IUser | null> - user object or null if not found
+     */
+    public async updateUser(id: string, updateData: Partial<IUser> ): Promise<IUser | null> {
+        try {
+            const updatedUser = await UserSchema.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+            return updatedUser;
+        } catch (error:any) {
+            console.error(`[AuthService][updateUser] Error updating user by Id '${id}':`, error);
+            if (error.code === 11000 && error.keyPattern?.email) {
+                throw new Error("DUPLICATE_EMAIL");
+            }
+            // Re-throw a more generic error or a custom application-specific error
+            throw new Error("Failed to retrieve user due to a server error.");
+        }
+    
+    }
+    /**
+     * find user by id
+     * @param id - id of user
+     * @param updateData - data for update user
+     * @returns Promise<IUser | null> - user object or null if not found
+     */
+    public async deleteUser(id: string): Promise<IUser | null> {
+        try {
+            const deletedUser = await UserSchema.findByIdAndDelete(id);
+            if (!deletedUser){
+                throw new Error("User is not exist!");
+            }
+            return deletedUser;
+        } catch (error:any) {
+            console.error(`[AuthService][updateUser] Error deleting user by Id '${id}':`, error);
+            // Re-throw a more generic error or a custom application-specific error
+            throw new Error("Failed to retrieve user due to a server error.");
         }
     }
 }
