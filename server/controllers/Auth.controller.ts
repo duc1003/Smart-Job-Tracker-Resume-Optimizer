@@ -1,5 +1,5 @@
 // controllers/Auth.controller.ts
-import { AuthService } from "../services/AuthService";
+import { AuthService } from "../services/Auth.service";
 import { Request, Response } from "express";
 import { IUser } from "../interfaces/IUser";
 import bcrypt from "bcrypt";
