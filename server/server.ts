@@ -7,6 +7,7 @@ import UserRouter from "./routes/User.route";
 import DashboardRouter from "./routes/Dashboard.route";
 import JobRouter from "./routes/Job.route";
 import { isRecruiter } from "./middlewares/role.middleware";
+import { authMiddleware } from "./middlewares/Auth.middleware";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
@@ -24,7 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use('/api/users', UserRouter);
 app.use('/api/dashboard', DashboardRouter);
-app.use('/api/jobs', isRecruiter, JobRouter)
+app.use('/api/jobs', authMiddleware, isRecruiter, JobRouter)
 
 app.listen(PORT, () => {
   Connect()
