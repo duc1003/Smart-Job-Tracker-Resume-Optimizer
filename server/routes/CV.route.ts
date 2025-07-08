@@ -11,7 +11,7 @@ const cvController = new CVController(); // Instantiate the controller
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Ensure the directory exists
-    const uploadDir = path.join(__dirname, '../../uploads/cvs');
+    const uploadDir = path.join(__dirname, '../uploads/cvs');
     // You might want to create the directory if it doesn't exist using fs.mkdirSync with { recursive: true }
     // but Multer often handles basic directory creation if the parent exists.
     cb(null, uploadDir);
@@ -45,12 +45,12 @@ const upload = multer({
 
 // API routes for CVs
 // For upload, authMiddleware must run *before* upload.single() to ensure req.userId is set
-router.post('/cvs', authMiddleware, upload.single('cvFile'), cvController.uploadCV);
-router.get('/cvs', authMiddleware, cvController.getCVsByUserId); // Assuming this is to get authenticated user's CVs
-router.get('/cvs/all', authMiddleware, cvController.getAllCVs); // Potentially for admin only
-router.get('/cvs/:id', authMiddleware, cvController.getCVById);
-router.put('/cvs/:id', authMiddleware, cvController.updateCVById);
-router.delete('/cvs/:id', authMiddleware, cvController.deleteCVById);
+router.post('/', authMiddleware, upload.single('cvFile'), cvController.uploadCV);
+router.get('/:user_id', authMiddleware, cvController.getCVsByUserId); // Assuming this is to get authenticated user's CVs
+router.get('/', authMiddleware, cvController.getAllCVs); // Potentially for admin only
+router.get('/:id', authMiddleware, cvController.getCVById);
+router.put('/:id', authMiddleware, cvController.updateCVById);
+router.delete('/:id', authMiddleware, cvController.deleteCVById);
 
 // If you want an endpoint to get CVs for a *specific* user (potentially by admin)
 // router.get('/cvs/user/:userId', authMiddleware, cvController.getCVsByUserId); // Uncomment if needed with proper auth

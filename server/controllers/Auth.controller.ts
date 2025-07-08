@@ -58,7 +58,7 @@ export class AuthController {
             const token = jwt.sign(
                 { id: user._id, email: user.email, role: user.role },
                 JWT_SECRET,
-                { expiresIn: "5h" }
+                { expiresIn: "7d" }
             );
 
             res.json({

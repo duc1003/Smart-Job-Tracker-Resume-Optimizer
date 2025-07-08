@@ -30,7 +30,7 @@ export class CVController {
      */
     public async uploadCV(req: AuthRequest, res: Response): Promise<void> {
         try {
-            if (!req.userId) {
+            if (!req.user || !req.user.id) {
                 // This shouldn't happen if authMiddleware is correctly placed before multer
                 res.status(401).json({ message: 'User not authenticated.' });
                 return;
@@ -51,7 +51,8 @@ export class CVController {
             }
 
             // Call the service method with userId and file path
-            const uploadedCV = await this.cvService.createCV(req.userId, name, content || '', req.file.path);
+            const userId = new Types.ObjectId(req.user.id)
+            const uploadedCV = await this.cvService.createCV(userId, name, content || '', req.file.path);
             
             res.status(201).json({
                 message: "CV uploaded successfully",
