@@ -30,6 +30,7 @@ export class CVController {
      */
     public async uploadCV(req: AuthRequest, res: Response): Promise<void> {
         try {
+            // console.log('Uploaded file:', req.file);
             if (!req.user || !req.user.id) {
                 // This shouldn't happen if authMiddleware is correctly placed before multer
                 res.status(401).json({ message: 'User not authenticated.' });
@@ -42,7 +43,7 @@ export class CVController {
             }
 
             const { name, content } = req.body; // 'name' and 'content' sent as part of form-data
-
+            console.log('Uploaded file:', req.body);
             if (!name) {
                 // Clean up the uploaded file if validation fails early
                 fs.unlinkSync(req.file.path);

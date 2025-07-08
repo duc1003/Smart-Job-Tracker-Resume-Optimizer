@@ -3,7 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import { authMiddleware } from '../middlewares/Auth.middleware'; // Import your auth middleware
 import { CVController } from '../controllers/CV.controller'; // Import the class
-
+import fs from 'fs';
 const router = Router();
 const cvController = new CVController(); // Instantiate the controller
 
@@ -12,15 +12,20 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Ensure the directory exists
     const uploadDir = path.join(__dirname, '../uploads/cvs');
+    // Đảm bảo thư mục tồn tại, nếu không có sẽ tự tạo
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
     // You might want to create the directory if it doesn't exist using fs.mkdirSync with { recursive: true }
     // but Multer often handles basic directory creation if the parent exists.
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     // Access userId from req *after* authMiddleware has run
-    const userId = (req as any).userId ? (req as any).userId.toString() : 'unknown';
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `${userId}-${uniqueSuffix}${path.extname(file.originalname)}`);
+    // const userId = (req as any).userId ? (req as any).userId.toString() : 'unknown';
+    // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    // cb(null, `${userId}-${uniqueSuffix}${path.extname(file.originalname)}`);
+    cb(null, file.originalname); 
   },
 });
 
@@ -45,7 +50,7 @@ const upload = multer({
 
 // API routes for CVs
 // For upload, authMiddleware must run *before* upload.single() to ensure req.userId is set
-router.post('/', authMiddleware, upload.single('cvFile'), cvController.uploadCV);
+router.post('/upload', authMiddleware, upload.single('cvFile'), cvController.uploadCV);
 router.get('/:user_id', authMiddleware, cvController.getCVsByUserId); // Assuming this is to get authenticated user's CVs
 router.get('/', authMiddleware, cvController.getAllCVs); // Potentially for admin only
 router.get('/:id', authMiddleware, cvController.getCVById);
