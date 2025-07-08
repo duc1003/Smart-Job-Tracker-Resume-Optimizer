@@ -6,7 +6,8 @@ import { Connect } from "./configs/Connect";
 import UserRouter from "./routes/User.route";
 import DashboardRouter from "./routes/Dashboard.route";
 import JobRouter from "./routes/Job.route";
-import { isRecruiter } from "./middlewares/role.middleware";
+import CVRouter from "./routes/CV.route";
+// import { isRecruiter } from "./middlewares/role.middleware";
 import { authMiddleware } from "./middlewares/Auth.middleware";
 
 const app: Express = express();
@@ -25,7 +26,8 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use('/api/users', UserRouter);
 app.use('/api/dashboard', DashboardRouter);
-app.use('/api/jobs', authMiddleware, isRecruiter, JobRouter)
+app.use('/api/jobs', authMiddleware, JobRouter);
+app.use('/api/CVs', CVRouter);
 
 app.listen(PORT, () => {
   Connect()

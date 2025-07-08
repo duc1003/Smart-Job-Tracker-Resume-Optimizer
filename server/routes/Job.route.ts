@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { JobController } from "../controllers/Job.controller";
+import { isRecruiter } from "../middlewares/role.middleware";
 
 
 const router = Router();
 const jobController = new JobController();
 
 // Route job recruitment
-router.post("/create", jobController.createJob);
+router.post("/create", isRecruiter, jobController.createJob);
 
 // Route get all jobs
 router.get("/", jobController.getAllJobs);
@@ -15,9 +16,9 @@ router.get("/", jobController.getAllJobs);
 router.get("/:id", jobController.getJobById);
 
 // Route update job by id
-router.put("/:id", jobController.updateJobById);
+router.put("/:id", isRecruiter, jobController.updateJobById);
 
 // Route delete job by id
-router.delete("/:id", jobController.deleteJobById);
+router.delete("/:id", isRecruiter, jobController.deleteJobById);
 
 export default router;
