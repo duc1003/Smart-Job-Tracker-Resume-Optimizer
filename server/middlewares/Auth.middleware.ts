@@ -14,6 +14,7 @@ declare global {
                 email: string;
                 role: 'job_seeker' | 'recruiter';
             };
+            file?: Express.Multer.File;
         }
     }
 }

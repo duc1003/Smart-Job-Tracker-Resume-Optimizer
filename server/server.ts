@@ -7,6 +7,7 @@ import UserRouter from "./routes/User.route";
 import DashboardRouter from "./routes/Dashboard.route";
 import JobRouter from "./routes/Job.route";
 import CVRouter from "./routes/CV.route";
+import ApplicationRouter from "./routes/Application.route";
 // import { isRecruiter } from "./middlewares/role.middleware";
 import { authMiddleware } from "./middlewares/Auth.middleware";
 
@@ -28,6 +29,7 @@ app.use('/api/users', UserRouter);
 app.use('/api/dashboard', DashboardRouter);
 app.use('/api/jobs', authMiddleware, JobRouter);
 app.use('/api/CVs', CVRouter);
+app.use('/api/applications', authMiddleware, ApplicationRouter)
 
 app.listen(PORT, () => {
   Connect()

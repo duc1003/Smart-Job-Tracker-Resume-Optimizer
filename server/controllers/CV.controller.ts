@@ -3,11 +3,6 @@ import { Types } from 'mongoose';
 import { CVService } from "../services/CV.service";
 import fs from 'fs'; // Still needed for potential early file cleanup
 
-// Define a custom Request interface to include userId from authMiddleware
-interface AuthRequest extends Request {
-    userId?: Types.ObjectId;
-    file?: Express.Multer.File; // Add Multer file type
-}
 
 export class CVController {
     private cvService: CVService;
@@ -28,7 +23,7 @@ export class CVController {
      * @param req - Express request object (with file from Multer)
      * @param res - Express response object
      */
-    public async uploadCV(req: AuthRequest, res: Response): Promise<void> {
+    public async uploadCV(req: Request, res: Response): Promise<void> {
         try {
             // console.log('Uploaded file:', req.file);
             if (!req.user || !req.user.id) {
@@ -77,15 +72,15 @@ export class CVController {
      * @param req - Express request object
      * @param res - Express response object
      */
-    public async getCVById(req: AuthRequest, res: Response): Promise<void> {
+    public async getCVById(req: Request, res: Response): Promise<void> {
         try {
-            if (!req.userId) {
+            if (!req.user || !req.user.id) {
                 res.status(401).json({ message: 'User not authenticated.' });
                 return;
             }
             const cvId = req.params.id;
-            
-            const cv = await this.cvService.getCVById(cvId, req.userId); // Pass userId for authorization
+            const userId = new Types.ObjectId(req.user.id);
+            const cv = await this.cvService.getCVById(cvId, userId); // Pass userId for authorization
             
             if (!cv) {
                 res.status(404).json({ message: "CV not found or you do not have permission to access it." });
@@ -114,17 +109,17 @@ export class CVController {
      * @param req - Express request object
      * @param res - Express response object
      */
-    public async updateCVById(req: AuthRequest, res: Response): Promise<void> {
+    public async updateCVById(req: Request, res: Response): Promise<void> {
         try {
-            if (!req.userId) {
+            if (!req.user || !req.user.id) {
                 res.status(401).json({ message: 'User not authenticated.' });
                 return;
             }
             const cvId = req.params.id;
             const updateData = req.body;
-            
-            const updatedCV = await this.cvService.updateCVById(cvId, req.userId, updateData); // Pass userId
-            
+            const userId = new Types.ObjectId(req.user.id);
+            const updatedCV = await this.cvService.updateCVById(cvId, userId, updateData); // Pass userId
+
             if (!updatedCV) {
                 res.status(404).json({ message: "CV not found or you do not have permission to update it." });
                 return;
@@ -151,15 +146,15 @@ export class CVController {
      * @param req - Express request object
      * @param res - Express response object
      */
-    public async deleteCVById(req: AuthRequest, res: Response): Promise<void> {
+    public async deleteCVById(req: Request, res: Response): Promise<void> {
         try {
-            if (!req.userId) {
+            if (!req.user || !req.user.id) {
                 res.status(401).json({ message: 'User not authenticated.' });
                 return;
             }
             const cvId = req.params.id;
-            
-            const deletedCV = await this.cvService.deleteCVById(cvId, req.userId); // Pass userId
+            const userId = new Types.ObjectId(req.user.id);
+            const deletedCV = await this.cvService.deleteCVById(cvId, userId); // Pass userId
             
             if (!deletedCV) {
                 res.status(404).json({ message: "CV not found or you do not have permission to delete it." });
@@ -213,17 +208,17 @@ export class CVController {
      * @param req - Express request object
      * @param res - Express response object
      */
-    public async getCVsByUserId(req: AuthRequest, res: Response): Promise<void> {
+    public async getCVsByUserId(req: Request, res: Response): Promise<void> {
         try {
             // This method in the controller is for fetching CVs by a specific user ID provided in params.
             // You might need an ADMIN role check here if a non-owner user is requesting this.
             // If it's for the *authenticated user*, then req.userId should be used instead of req.params.userId.
-            if (!req.userId) { // Assuming this endpoint is also protected by authMiddleware
+            if (!req.user || !req.user.id) {
                 res.status(401).json({ message: 'User not authenticated.' });
                 return;
             }
 
-            const targetUserId = req.params.userId; // This is the ID from the URL param
+            const targetUserId = req.params.user_id; // This is the ID from the URL param
             
             // SECURITY NOTE: If req.params.userId is different from req.userId,
             // you must add an authorization check here (e.g., isAdmin middleware).

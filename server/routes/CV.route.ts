@@ -11,7 +11,7 @@ const cvController = new CVController(); // Instantiate the controller
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Ensure the directory exists
-    const uploadDir = path.join(__dirname, '../uploads/cvs');
+    const uploadDir = path.join("", '../uploads/cvs');
     // Đảm bảo thư mục tồn tại, nếu không có sẽ tự tạo
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -53,7 +53,7 @@ const upload = multer({
 router.post('/upload', authMiddleware, upload.single('cvFile'), cvController.uploadCV);
 router.get('/:user_id', authMiddleware, cvController.getCVsByUserId); // Assuming this is to get authenticated user's CVs
 router.get('/', authMiddleware, cvController.getAllCVs); // Potentially for admin only
-router.get('/:id', authMiddleware, cvController.getCVById);
+router.get('/detail/:id', authMiddleware, cvController.getCVById);
 router.put('/:id', authMiddleware, cvController.updateCVById);
 router.delete('/:id', authMiddleware, cvController.deleteCVById);
 
