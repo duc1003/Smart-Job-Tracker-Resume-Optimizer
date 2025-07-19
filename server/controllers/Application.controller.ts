@@ -59,6 +59,18 @@ export class ApplicationController {
                 res.status(400).json({ error: "Invalid User ID!" });
                 return;
             }
+            
+            const existingApplication = await this.applicationService.findApplicationById(applicationId);
+        
+            if (!existingApplication) {
+                res.status(404).json({ message: "Application not found." });
+                return;
+            }
+
+            if (existingApplication.userId.toString() !== req.user.id && req.user.role !== 'admin') {
+                res.status(403).json({ message: "Access denied. You don't own this application." });
+                return;
+            }
 
             const applications = await this.applicationService.findApplicationByUserId(targetUserId);
             
