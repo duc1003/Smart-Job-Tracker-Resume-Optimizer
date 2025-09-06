@@ -1,0 +1,135 @@
+# 🧠 Smart Job Tracker & Resume Optimizer
+
+### Nền tảng hỗ trợ tìm việc thông minh tích hợp AI (GPT-4)
+
+---
+
+## 🎯 Vấn đề
+
+* Người tìm việc thường phải chỉnh sửa CV thủ công theo từng JD (Job Description) — mất thời gian và dễ thiếu sót.
+* Khó đánh giá liệu CV của mình có thực sự phù hợp với JD.
+* Không có hệ thống theo dõi quá trình ứng tuyển hiệu quả.
+* Nhà tuyển dụng mất nhiều thời gian lọc hồ sơ và đánh giá ứng viên.
+
+---
+
+## 💡 Giải pháp
+
+**Smart Job Tracker & Resume Optimizer** cung cấp một nền tảng AI giúp:
+
+* Tự động đánh giá mức độ phù hợp giữa CV và JD.
+* Gợi ý chỉnh sửa hoặc tạo mới CV dựa trên mô tả công việc.
+* Theo dõi quá trình ứng tuyển như một CRM cá nhân.
+* Hỗ trợ nhà tuyển dụng quản lý ứng viên và phỏng vấn bằng AI.
+
+---
+
+## 👥 Đối tượng người dùng chính
+
+| Loại người dùng      | Mục tiêu                                                       |
+| -------------------- | -------------------------------------------------------------- |
+| 🧑‍💻 Người tìm việc | Tối ưu và cá nhân hóa CV, theo dõi ứng tuyển, nhận gợi ý từ AI |
+| 🧑‍💼 Nhà tuyển dụng | Đăng job, tiếp nhận và lọc hồ sơ, phỏng vấn ứng viên bằng AI   |
+
+---
+
+## 🔧 Công nghệ sử dụng (Tech Stack)
+
+* **Frontend:** React.js hoặc Vue.js + TailwindCSS + TypeScript
+* **Backend:** Node.js (Express) + TypeScript
+* **AI:** GPT-4 API (OpenAI)
+* **Database:** MongoDB (Mongoose), sau đó mở rộng sang MySQL nếu cần
+* **Automation:** Puppeteer / Scraper API
+* **Tích hợp:** Google API (Calendar, Drive, Gmail), LinkedIn, Indeed
+
+---
+
+## ⚙️ Tính năng chính (MVP)
+
+### 👤 Dành cho người tìm việc
+
+* **Đánh giá CV & JD:** GPT-4 phân tích mức độ phù hợp.
+* **Gợi ý chỉnh sửa CV:** Thêm kỹ năng, từ khóa theo JD.
+* **Tạo CV từ JD:** Tự động sinh CV cá nhân hóa từ một JD cụ thể.
+* **Theo dõi ứng tuyển:** Trạng thái: Đã nộp, Phỏng vấn, Từ chối, Offer.
+* **Nhắc gửi follow-up email:** Có mẫu sẵn, nhắc người dùng sau 3–5 ngày.
+
+### 🧑‍💼 Dành cho nhà tuyển dụng
+
+* **Đăng tin tuyển dụng**
+* **Quản lý ứng viên:** Lọc theo độ phù hợp (AI chấm điểm).
+* **Phỏng vấn bằng AI:** GPT-4 hỏi – đánh giá ứng viên theo JD + CV.
+
+---
+
+## 🔗 Tính năng tích hợp nâng cao
+
+| Tính năng               | Mô tả                                    |
+| ----------------------- | ---------------------------------------- |
+| Google Calendar         | Tự động thêm lịch phỏng vấn              |
+| Google Drive            | Lưu CV, JD dưới dạng thư mục             |
+| Gmail API               | Gửi CV, follow-up trực tiếp              |
+| LinkedIn/Indeed Scraper | Lấy job mới hằng ngày                    |
+| Gợi ý job phù hợp       | Dựa vào nội dung CV và lịch sử ứng tuyển |
+| Dashboard thống kê      | Timeline, Heatmap theo dõi tiến độ       |
+| Bộ CV chuyên biệt       | Tạo nhiều CV tương ứng với từng JD       |
+
+---
+
+## 🧩 Phân hệ người dùng
+
+| Phân hệ                   | Mô tả                                          |
+| ------------------------- | ---------------------------------------------- |
+| Người tìm việc            | Nhập CV, JD, tạo CV, theo dõi trạng thái       |
+| Nhà tuyển dụng            | Đăng bài tuyển, lọc hồ sơ, mock interview AI   |
+| Quản trị viên *(mở rộng)* | Quản lý người dùng, báo cáo, giám sát hệ thống |
+
+---
+
+## 🏗️ Kiến trúc hệ thống
+
+### **Frontend**
+
+* Auth: JWT, Google OAuth2
+* CV Editor: Rich Text Editor + Export PDF
+* Job Tracker UI: Kanban hoặc List
+* Dashboard thống kê: Timeline, Heatmap
+* AI Feedback Viewer
+
+### **Backend**
+
+* API routes: `/auth`, `/jobs`, `/cv`, `/ai`, `/recruiter`, `/applications`
+* MongoDB Models: User, Job, CV, Application
+* GPT Logic: Đánh giá CV ↔ JD, gợi ý thay đổi
+* Scheduler: Reminder follow-up, đồng bộ Google Calendar
+
+---
+
+## 📅 Giai đoạn phát triển (Roadmap)
+
+| Giai đoạn             | Nội dung                                                                                 |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| **Giai đoạn 1 (MVP)** | Nhập CV + JD, đánh giá độ phù hợp, gợi ý chỉnh sửa CV, tạo CV từ JD, theo dõi trạng thái |
+| **Giai đoạn 2**       | Tích hợp Gmail API (follow-up), Google Drive, Dashboard thống kê                         |
+| **Giai đoạn 3**       | Scraper job (LinkedIn/Indeed), gợi ý job, tạo nhiều bộ CV                                |
+| **Giai đoạn 4**       | Chức năng dành cho nhà tuyển dụng, AI phỏng vấn, Google Calendar sync                    |
+
+---
+
+## 🌟 Giá trị khác biệt (USP)
+
+* Tích hợp GPT-4 – vượt trội hơn so với các công cụ CV truyền thống.
+* Trải nghiệm người dùng như một **CRM cá nhân cho tìm việc**.
+* Kết hợp đa nền tảng: từ LinkedIn, Gmail tới Google Calendar.
+* Giao diện trực quan, dễ sử dụng, dễ mở rộng.
+
+---
+
+## 🚀 Tầm nhìn mở rộng
+
+* Phát triển thành nền tảng **Job AI Assistant** toàn diện.
+* Mở API cho các nền tảng tuyển dụng tích hợp.
+* Tự học từ dữ liệu người dùng để cải thiện gợi ý CV, job.
+* Tích hợp phỏng vấn video + phân tích ngôn ngữ cơ thể (AI vision).
+
+

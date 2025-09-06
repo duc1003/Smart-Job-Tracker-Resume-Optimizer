@@ -1,0 +1,133 @@
+## 🧑‍💻 Đối với người tìm việc (Job Seeker)
+
+### 🔐 1. Đăng ký / Đăng nhập
+
+* Có 2 tùy chọn: đăng ký bằng email hoặc đăng nhập nhanh qua Google (OAuth2).
+* Sau khi đăng nhập, người dùng được chuyển đến **Trang Dashboard chính**.
+
+---
+
+### 📄 2. Tạo hoặc tải lên CV
+
+* Có thể:
+
+  * **Tải lên CV hiện tại** (PDF/DOCX → tự động trích xuất nội dung).
+  * **Tạo CV mới** bằng **CV Editor**: giao diện rich text + chọn template.
+* Có thể lưu nhiều CV khác nhau (CV cho vị trí Developer, CV cho vị trí Designer,…).
+
+---
+
+### 💼 3. Nhập Job Description (JD)
+
+* Dán nội dung JD từ job post bất kỳ (VD: từ LinkedIn).
+* Hệ thống GPT-4 sẽ:
+
+  * Đánh giá độ phù hợp giữa CV và JD (hiển thị score %).
+  * Gợi ý phần cần chỉnh sửa: thêm kỹ năng, thay từ khóa, cải thiện mô tả kinh nghiệm.
+  * Cho phép tạo bản **CV mới tối ưu hóa** chỉ trong 1 click.
+
+---
+
+### 📩 4. Ứng tuyển & Theo dõi
+
+* Người dùng đánh dấu job đó là **đã nộp**, chọn trạng thái:
+
+  * ⏳ Chờ phản hồi
+  * 📞 Đang phỏng vấn
+  * ❌ Từ chối
+  * ✅ Nhận offer
+* Hiển thị các job theo **timeline hoặc kanban**.
+
+---
+
+### 🛎️ 5. Tự động nhắc follow-up
+
+* Nếu trạng thái "Chờ phản hồi" > 3 ngày, hệ thống nhắc người dùng gửi follow-up email.
+* Có thể gửi trực tiếp bằng Gmail API + mẫu email sẵn có.
+
+---
+
+### 📊 6. Dashboard theo dõi quá trình
+
+* Thống kê:
+
+  * Số job đã nộp
+  * Tỉ lệ phản hồi
+  * Thời gian trung bình nhận phản hồi
+  * Heatmap các ngày nộp đơn
+
+---
+
+### 💡 7. Gợi ý job mới mỗi ngày
+
+* AI đọc nội dung CV và lịch sử ứng tuyển → gợi ý job từ Indeed/LinkedIn (qua API hoặc scraper).
+* Có thể click vào job → tự động sinh JD + gợi ý CV phù hợp.
+
+---
+
+## 🧑‍💼 Đối với nhà tuyển dụng (Recruiter)
+
+### 🔐 1. Đăng ký tài khoản tuyển dụng
+
+* Qua email công ty hoặc Google login.
+* Phân quyền recruiter riêng biệt.
+
+---
+
+### 📢 2. Đăng bài tuyển dụng
+
+* Nhập JD, yêu cầu, mức lương,...
+* Có thể lưu làm mẫu để tái sử dụng sau này.
+
+---
+
+### 📂 3. Quản lý hồ sơ ứng viên
+
+* Xem danh sách ứng viên đã nộp theo từng job post.
+* Mỗi hồ sơ có:
+
+  * CV
+  * Điểm phù hợp do GPT chấm
+  * Gợi ý nhận xét từ AI
+* Có thể lọc theo điểm phù hợp, kỹ năng,...
+
+---
+
+### 🧠 4. Mock Interview AI (nâng cao)
+
+* Chọn một CV + JD → hệ thống đưa ra bộ câu hỏi phỏng vấn.
+* Ứng viên trả lời trực tiếp hoặc nhập câu trả lời.
+* AI chấm điểm + phản hồi.
+
+---
+
+## 📁 Tích hợp các nền tảng ngoài
+
+| Tích hợp            | Vai trò                                      |
+| ------------------- | -------------------------------------------- |
+| **Google Drive**    | Lưu CV, JD, export PDF tự động               |
+| **Google Calendar** | Lên lịch phỏng vấn tự động                   |
+| **Gmail API**       | Gửi mail ứng tuyển, follow-up, nhận phản hồi |
+| **LinkedIn/Indeed** | Lấy dữ liệu job mới mỗi ngày                 |
+
+---
+
+## 🖥️ Tổng quan giao diện người dùng (UI)
+
+1. **Trang chủ (Landing Page)**
+   → Giới thiệu tính năng, CTA: “Bắt đầu miễn phí”.
+
+2. **Dashboard người dùng**
+   → Theo dõi job, chỉnh sửa CV, nhập JD, gợi ý AI.
+
+3. **CV Editor**
+   → Rich text editor + chọn mẫu → export PDF.
+
+4. **AI Feedback Page**
+   → Hiển thị đánh giá GPT, highlight các phần cần sửa trong CV.
+
+5. **Job Tracker UI**
+   → Giao diện Kanban hoặc Timeline để quản lý các job đã nộp.
+
+6. **Trang quản lý nhà tuyển dụng**
+   → Đăng tin, lọc hồ sơ, phỏng vấn AI.
