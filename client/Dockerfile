@@ -1,5 +1,5 @@
 # Development mode Dockerfile for Vite React app
-FROM node:20-alpine
+FROM node:18
 
 WORKDIR /app
 
@@ -7,13 +7,14 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies (including dev dependencies for development)
-RUN npm ci
+# RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .
 
 # Expose Vite dev server port
-EXPOSE 5173
+# EXPOSE 8080
 
 # Start development server with host binding for Docker access
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
+CMD ["npm", "run", "dev"]
