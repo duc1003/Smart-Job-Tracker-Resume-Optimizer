@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # Expose port (tuỳ theo server bạn chạy ở cổng nào, ví dụ: 5000)
-EXPOSE 8080
+# EXPOSE 8080
 
 # Start server
-CMD ["npm", "dev"]
+CMD ["npm", "run", "dev"]
