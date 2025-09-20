@@ -18,4 +18,4 @@ RUN npm run build
 EXPOSE 5173
 
 # Start server
-CMD ["npm", "start"]
+CMD ["npm", "dev"]
