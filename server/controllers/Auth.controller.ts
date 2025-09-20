@@ -25,11 +25,7 @@ export class AuthController {
         this.delete = this.delete.bind(this)
     }
 
-    /**
-     * Đăng nhập người dùng
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
+
     public async login(req: Request, res: Response): Promise<void> {
         try {
             // Dữ liệu đã được validate bởi validationMiddleware
@@ -78,11 +74,6 @@ export class AuthController {
         }
     }
 
-    /**
-     * Đăng ký người dùng mới
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
     public async register(req: Request, res: Response): Promise<void> {
         try {
             // Dữ liệu đã được validate bởi validationMiddleware
@@ -118,11 +109,6 @@ export class AuthController {
         }
     }
 
-    /**
-     * Cập nhật thông tin người dùng
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
     public async update(req: Request, res: Response): Promise<void> {
         if (!req.user || !req.user.id){
             res.status(401).json({ error: 'Truy cập bị từ chối. Phải đăng nhập!' });
@@ -163,11 +149,6 @@ export class AuthController {
         }
     }
 
-    /**
-     * Xóa người dùng
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
     public async delete(req: Request, res: Response): Promise<void>{
         if (!req.user || !req.user.id){
             res.status(401).json({ error: 'Truy cập bị từ chối. Phải đăng nhập!' });

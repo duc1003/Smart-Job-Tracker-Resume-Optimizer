@@ -7,7 +7,7 @@ const UserSchema = new Schema<IUser>(
     passwordHash: { type: String },
     googleId: { type: String, unique: true, sparse: true },
     linkedinId: { type: String, unique: true, sparse: true },
-    role: { type: String, enum: ['job_seeker', 'recruiter'], required: true },
+    role: { type: String, enum: ['job_seeker', 'recruiter', 'admin'], required: true },
     name: { type: String },
     profilePictureUrl: { type: String },
     googleAccessToken: { type: String },

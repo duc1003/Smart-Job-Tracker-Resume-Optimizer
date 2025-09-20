@@ -1,15 +1,9 @@
 import { IApplication } from "../interfaces/IApplication";
 import ApplicationSchema from "../models/Application.model";
 import { Document } from "mongoose";
-// Define a type for a Mongoose Application Document to include methods like .save()
-// type ApplicationDocument = IApplication & Document;
 
 export class ApplicationService {
-  /**
-   * Find application by id
-   * @param id - id of application
-   * @returns Promise<IApplication | null> - application object or null if not found
-   */
+
   public async findApplicationById(id: string): Promise<IApplication | null> {
     try {
       return ApplicationSchema.findById(id);
@@ -22,11 +16,8 @@ export class ApplicationService {
     }
   }
 
-  /**
-   * Create application
-   * @param applicationData - data for the new application
-   * @returns Promise<IApplication | null> - created application object or null if creation failed
-   */
+
+  
   public async createApplication(applicationData: Partial<IApplication>): Promise<IApplication | null> {
     try {
       const newApplication = new ApplicationSchema(applicationData);
@@ -50,10 +41,7 @@ export class ApplicationService {
     }
   }
 
-    /**
-   * Get all applications
-   * @returns Promise<IApplication[]> - array of application objects or an empty array if none found
-   */
+
   public async findAllApplication(): Promise<IApplication[]> {
     try {
       return await ApplicationSchema.find();
@@ -66,11 +54,8 @@ export class ApplicationService {
     }
   }
 
-  /**
-   * Find application by user ID
-   * @param userId - ID of the user
-   * @returns Promise<IApplication | null> - application object or null if not found
-   */
+
+
   public async findApplicationByUserId(userId: string): Promise<IApplication[]> {
     try {
       return await ApplicationSchema.find({ userId:userId }).sort({ createdAt: -1 });
@@ -83,12 +68,7 @@ export class ApplicationService {
     }
   }
 
-  /**
-   * Update Application
-   * @param id 
-   * @param applicationData 
-   * @returns Promise<IApplication | null> - updated application object or null if not found
-   */
+
   public async updateApplication(id: string, applicationData: Partial<IApplication>): Promise<IApplication | null> {
     try {
       const updatedApplication = await ApplicationSchema.findByIdAndUpdate(id, applicationData, { new: true });
@@ -102,11 +82,7 @@ export class ApplicationService {
     }
   }
 
-  /**
-   * Delete Application
-   * @param id - ID of the application to delete
-   * @returns Promise<IApplication | null> - deleted application object or null if not found
-   */
+
   public async deleteApplication(id:string): Promise<IApplication | null>{
     try {
       const deletedApplication = await ApplicationSchema.findByIdAndDelete(id);

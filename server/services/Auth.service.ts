@@ -8,11 +8,7 @@ import { Document } from 'mongoose';
 type UserDocument = IUser & Document;
 
 export class AuthService {
-    /**
-     * find user by email
-     * @param email - email of user
-     * @returns Promise<IUser | null> - user object or null if not found
-     */
+    
     public async findUserByEmail(email: string): Promise<IUser | null> {
         try {
             // No 'await' needed here as the function is async and will return the Promise directly
@@ -24,12 +20,8 @@ export class AuthService {
         }
     }
 
-    /**
-     * create new user
-     * @param userData - object containing user data (email and role are required)
-     * @returns Promise<IUser> - newly created user object
-     */
-    public async createUser(userData: Partial<IUser> & { email: string; role: 'job_seeker' | 'recruiter'; }): Promise<IUser> {
+    
+    public async createUser(userData: Partial<IUser> & { email: string; role: 'job_seeker' | 'recruiter' | 'admin'; }): Promise<IUser> {
         try {
             const newUser: UserDocument = new UserSchema(userData);
             return await newUser.save();
@@ -52,11 +44,7 @@ export class AuthService {
         }
     }
 
-    /**
-     * find user by id
-     * @param id - id of user
-     * @returns Promise<IUser | null> - user object or null if not found
-     */
+   
     public async findUserById(id: string): Promise<IUser | null> {
         try {
             // No 'await' needed here as the function is async and will return the Promise directly
@@ -68,12 +56,7 @@ export class AuthService {
         }
     }
 
-    /**
-     * find user by id
-     * @param id - id of user
-     * @param updateData - data for update user
-     * @returns Promise<IUser | null> - user object or null if not found
-     */
+
     public async updateUser(id: string, updateData: Partial<IUser> ): Promise<IUser | null> {
         try {
             const updatedUser = await UserSchema.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
@@ -88,12 +71,7 @@ export class AuthService {
         }
     
     }
-    /**
-     * find user by id
-     * @param id - id of user
-     * @param updateData - data for update user
-     * @returns Promise<IUser | null> - user object or null if not found
-     */
+
     public async deleteUser(id: string): Promise<IUser | null> {
         try {
             const deletedUser = await UserSchema.findByIdAndDelete(id);

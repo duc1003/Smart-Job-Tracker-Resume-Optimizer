@@ -12,17 +12,13 @@ declare global {
             user?: {
                 id: string;
                 email: string;
-                role: 'job_seeker' | 'recruiter';
+                role: 'job_seeker' | 'recruiter' | 'admin';
             };
             file?: Express.Multer.File;
         }
     }
 }
 
-/**
- * Middleware để xác thực JWT từ header Authorization.
- * Đính kèm dữ liệu người dùng đã giải mã vào req.user nếu token hợp lệ.
- */
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Định dạng: "Bearer <TOKEN>"
@@ -43,7 +39,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         const decoded = jwt.verify(token, jwtSecret) as {
             id: string;
             email: string;
-            role: 'job_seeker' | 'recruiter';
+            role: 'job_seeker' | 'recruiter' | 'admin';
             iat: number;
             exp: number;
         };
@@ -70,11 +66,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 };
 
-/**
- * Middleware tùy chọn cho phân quyền dựa trên vai trò.
- * Đảm bảo nó được sử dụng SAU authMiddleware.
- */
-export const authorizeRole = (requiredRoles: Array<'job_seeker' | 'recruiter'>) => {
+export const authorizeRole = (requiredRoles: Array<'job_seeker' | 'recruiter' | 'admin'>) => {
     return (req: Request, res: Response, next: NextFunction) => {
         if (!req.user) {
             // Điều này không nên xảy ra nếu authMiddleware chạy trước

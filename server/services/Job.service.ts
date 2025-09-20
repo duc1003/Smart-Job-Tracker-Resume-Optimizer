@@ -7,11 +7,7 @@ import { Document } from "mongoose";
 type JobDocument = IJob & Document;
 
 export class JobService {
-  /**
-   * find job by id
-   * @param id - id of job
-   * @returns Promise<IJob | null> - job object or null if not found
-   */
+
   public async findJobById(id: string): Promise<IJob | null> {
     try {
       // No 'await' needed here as the function is async and will return the Promise directly
@@ -59,10 +55,8 @@ export class JobService {
       throw new Error("Failed to create job due to a server error.");
     }
   }
-  /**
-   * find all jobs
-   * @returns Promise<IJob[]> - array of job objects
-   */
+
+
   public async findAllJobs(): Promise<IJob[]> {
     try {
       return JobSchema.find({});
@@ -72,12 +66,7 @@ export class JobService {
       throw new Error("Failed to retrieve jobs due to a server error.");
     }
   }
-  /**
-   * update job by id
-   * @param id - id of job
-   * @param jobData - object containing job data to update
-   * @returns Promise<IJob | null> - updated job object or null if not found
-   */
+
   public async updateJobById(
     id: string,
     jobData: Partial<IJob>
@@ -108,11 +97,7 @@ export class JobService {
       throw new Error("Failed to update job due to a server error.");
     }
   }
-  /**
-   * delete job by id
-   * @param id - id of job
-   * @returns Promise<IJob | null> - deleted job object or null if not found
-   */
+
   public async deleteJobById(id: string): Promise<IJob | null> {
     try {
       const deletedJob = await JobSchema.findByIdAndDelete(id);

@@ -18,11 +18,6 @@ export class ApplicationController {
 
     }
 
-    /**
-     * Get all applications (for admin use or internal logic).
-     * @param req - Express request object
-     * @param res - Express response object
-     */
     public async getAllApplications(req: Request, res: Response): Promise<void> {
         try {
             // IMPORTANT: This endpoint exposes ALL applications.
@@ -41,11 +36,6 @@ export class ApplicationController {
         }
     }
 
-    /**
-     * Get applications by User ID.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
     public async getApplicationByUserId(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {
@@ -60,17 +50,17 @@ export class ApplicationController {
                 return;
             }
             
-            const existingApplication = await this.applicationService.findApplicationById(applicationId);
+            // const existingApplication = await this.applicationService.findApplicationById(applicationId);
         
-            if (!existingApplication) {
-                res.status(404).json({ message: "Application not found." });
-                return;
-            }
+            // if (!existingApplication) {
+            //     res.status(404).json({ message: "Application not found." });
+            //     return;
+            // }
 
-            if (existingApplication.userId.toString() !== req.user.id && req.user.role !== 'admin') {
-                res.status(403).json({ message: "Access denied. You don't own this application." });
-                return;
-            }
+            // if (existingApplication.userId.toString() !== req.user.id && req.user.role !== 'admin') {
+            //     res.status(403).json({ message: "Access denied. You don't own this application." });
+            //     return;
+            // }
 
             const applications = await this.applicationService.findApplicationByUserId(targetUserId);
             
@@ -92,11 +82,6 @@ export class ApplicationController {
         }
     }
 
-    /**
-     * Create a new application.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
     public async createApplication(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {
@@ -125,11 +110,7 @@ export class ApplicationController {
         }
     }
     
-    /**
-     * Get application by ID for the authenticated user.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
+
     public async getApplicationById(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {
@@ -168,11 +149,6 @@ export class ApplicationController {
         }
     }
 
-    /**
-     * Update application by ID for the authenticated user.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
     public async updateApplication(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {
@@ -217,11 +193,6 @@ export class ApplicationController {
         }
     }
 
-    /**
-     * Delete application by ID for the authenticated user.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
     public async deleteApplication(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {

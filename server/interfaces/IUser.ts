@@ -5,7 +5,7 @@ export interface IUser extends Document {
   passwordHash?: string;
   googleId?: string;
   linkedinId?: string;
-  role: 'job_seeker' | 'recruiter';
+  role: 'job_seeker' | 'recruiter' | 'admin';
   name?: string;
   profilePictureUrl?: string;
   googleAccessToken?: string;

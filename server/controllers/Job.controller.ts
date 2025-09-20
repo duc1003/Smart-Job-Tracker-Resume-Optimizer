@@ -15,11 +15,6 @@ export class JobController {
         this.deleteJobById = this.deleteJobById.bind(this)
     }
 
-    /**
-     * Tạo một công việc mới
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
     public async createJob(req:Request, res:Response):Promise<void>{
         try {
             const user = req.user;

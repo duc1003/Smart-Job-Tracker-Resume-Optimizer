@@ -18,11 +18,7 @@ export class CVController {
         this.getCVsByUserId = this.getCVsByUserId.bind(this);
     }
 
-    /**
-     * Upload a CV file (PDF/DOCX) and save its data.
-     * @param req - Express request object (with file from Multer)
-     * @param res - Express response object
-     */
+
     public async uploadCV(req: Request, res: Response): Promise<void> {
         try {
             // console.log('Uploaded file:', req.file);
@@ -67,11 +63,7 @@ export class CVController {
         }
     }
 
-    /**
-     * Get CV by ID for the authenticated user.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
+
     public async getCVById(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {
@@ -104,11 +96,7 @@ export class CVController {
         }
     }
 
-    /**
-     * Update CV by ID for the authenticated user.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
+
     public async updateCVById(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {
@@ -141,11 +129,7 @@ export class CVController {
         }
     }
 
-    /**
-     * Delete CV by ID for the authenticated user.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
+
     public async deleteCVById(req: Request, res: Response): Promise<void> {
         try {
             if (!req.user || !req.user.id) {
@@ -177,11 +161,7 @@ export class CVController {
         }
     }
 
-    /**
-     * Get all CVs (for admin use or internal logic that requires all CVs).
-     * @param req - Express request object
-     * @param res - Express response object
-     */
+
     public async getAllCVs(req: Request, res: Response): Promise<void> {
         try {
             // IMPORTANT: This endpoint exposes ALL CVs.
@@ -201,13 +181,7 @@ export class CVController {
         }
     }
 
-    /**
-     * Get CVs by User ID (This logic is very similar to getCVs, so consider merging if redundant).
-     * This endpoint implies a user might fetch CVs for *another* user, which needs careful authorization.
-     * If it's for *the authenticated user*, then `getCVs` (from previous examples) with `req.userId` is more appropriate.
-     * @param req - Express request object
-     * @param res - Express response object
-     */
+
     public async getCVsByUserId(req: Request, res: Response): Promise<void> {
         try {
             // This method in the controller is for fetching CVs by a specific user ID provided in params.
