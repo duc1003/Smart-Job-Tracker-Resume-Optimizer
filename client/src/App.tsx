@@ -12,6 +12,9 @@ import Analytics from "./pages/Analytics";
 import Calendar from "./pages/Calendar";
 import JobMatcher from "./pages/JobMatcher";
 import Settings from "./pages/Settings";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import SignOut from "./pages/SignOut";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +27,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signout" element={<SignOut />} />
           <Route path="/applications" element={<JobApplications />} />
           <Route path="/cv-manager" element={<CVManager />} />
           <Route path="/ai-analysis" element={<AIAnalysis />} />

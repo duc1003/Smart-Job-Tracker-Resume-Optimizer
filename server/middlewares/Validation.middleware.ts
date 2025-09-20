@@ -5,6 +5,9 @@ import { AnyZodObject, ZodError } from 'zod';
 export const validate = (schema: AnyZodObject) =>
     (req: Request, res: Response, next: NextFunction) => {
         try {
+            console.log('====================================');
+            console.log(req.body);
+            console.log('====================================');
             // Sử dụng .parse() để Zod tự động ném lỗi nếu validation thất bại
             schema.parse(req.body);
             next();

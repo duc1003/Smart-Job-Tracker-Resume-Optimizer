@@ -50,11 +50,6 @@ export class JobController {
 
     }
 
-    /**
-     * Lấy tất cả công việc
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
     public async getAllJobs(req:Request, res:Response):Promise<void>{
         try {
             const jobs = await this.jobService.findAllJobs()
@@ -70,11 +65,7 @@ export class JobController {
 
     }
 
-    /**
-     * Lấy thông tin công việc theo ID
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
+
     public async getJobById(req:Request, res:Response):Promise<void>{
         try {
             const jobId = req.params.id
@@ -95,11 +86,7 @@ export class JobController {
 
     }
 
-    /**
-     *  Cập nhật thông tin Job theo ID
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
+
     public async updateJobById(req:Request, res:Response):Promise<void>{
         try {
             const jobId = req.params.id
@@ -119,11 +106,6 @@ export class JobController {
         }
     }
 
-    /**
-     * Xóa một công việc theo ID
-     * @param req - Đối tượng request của Express
-     * @param res - Đối tượng response của Express
-     */
     public async deleteJobById(req:Request, res:Response):Promise<void>{
         try {
             const jobId = req.params.id
