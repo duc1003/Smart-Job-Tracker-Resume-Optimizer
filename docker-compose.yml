@@ -1,32 +1,67 @@
+version: '3.8'
+
 services:
   mongodb:
-    image: mongo
+    image: mongo:7-jammy
     container_name: mongodb
-    restart: always
+    restart: unless-stopped
     ports:
       - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=smart-job-tracker-resume-optimizer
     volumes:
       - mongo-data:/data/db
+    networks:
+      - app-network
 
   backend:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     container_name: node-backend
-    restart: always
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
+      - NODE_ENV=development
       - MONGO_URL=mongodb://mongodb:27017/smart-job-tracker-resume-optimizer
+      - PORT=3000
     depends_on:
       - mongodb
+    volumes:
+      - ./server:/app/server
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - /app/node_modules
+    networks:
+      - app-network
 
   frontend:
-    build: ./client
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
     container_name: react-frontend
-    restart: always
+    restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:3000/api
     depends_on:
       - backend
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+      - ./client/package.json:/app/package.json
+      - ./client/vite.config.ts:/app/vite.config.ts
+      - ./client/tsconfig.json:/app/tsconfig.json
+      - /app/node_modules
+    networks:
+      - app-network
 
 volumes:
   mongo-data:
+
+networks:
+  app-network:
+    driver: bridge
